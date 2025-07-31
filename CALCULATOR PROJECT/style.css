@@ -1,33 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
 
 :root {
-    --dark-bg: #0d1117;
-    --dark-calc-bg: #161b22;
-    --dark-display-bg: #010409;
-    --dark-text-color: #e6edf3;
-    --dark-btn-bg: #21262d;
-    --dark-btn-shadow-light: rgba(255, 255, 255, 0.05);
-    --dark-btn-shadow-dark: rgba(0, 0, 0, 0.7);
-    --dark-operator-color: #58a6ff;
-    --dark-clear-color: #f85149;
-    --dark-equals-color: #2ea44f;
-    --dark-scientific-color: #8957e5;
-    --dark-feature-color: #3fb950;
-    --dark-border: rgba(255, 255, 255, 0.1);
+    /* Pure Black & White Dark Theme Variables */
+    --main-bg: #000000; /* Absolute black for background */
+    --calc-bg: #1a1a1a; /* Very dark grey for calculator body */
+    --display-bg: #0d0d0d; /* Slightly lighter black for display */
+    --text-color-light: #ffffff; /* Pure white for main text/numbers */
+    --text-color-dark: #cccccc; /* Light grey for subtle text */
+    --btn-bg: #333333; /* Dark grey for general buttons */
+    --btn-hover-bg: #4d4d4d; /* Slightly lighter grey on hover */
+    --btn-active-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.8), inset -3px -3px 7px rgba(255, 255, 255, 0.05);
+    --btn-shadow: 6px 6px 12px rgba(0, 0, 0, 0.8), -6px -6px 12px rgba(255, 255, 255, 0.03);
 
-    --light-bg: #e2e8f0;
-    --light-calc-bg: #f8fafc;
-    --light-display-bg: #ffffff;
-    --light-text-color: #2d3748;
-    --light-btn-bg: #edf2f7;
-    --light-btn-shadow-light: rgba(255, 255, 255, 0.9);
-    --light-btn-shadow-dark: rgba(0, 0, 0, 0.15);
-    --light-operator-color: #0366d6;
-    --light-clear-color: #d73a49;
-    --light-equals-color: #22863a;
-    --light-scientific-color: #6f42c1;
-    --light-feature-color: #28a745;
-    --light-border: rgba(0, 0, 0, 0.1);
+    /* Specific button colors (still grayscale) */
+    --operator-btn-bg: #666666; /* Medium grey for operators */
+    --operator-btn-hover: #7a7a7a;
+    --clear-btn-bg: #555555; /* Slightly different dark grey for clear */
+    --clear-btn-hover: #6a6a6a;
+    --equals-btn-bg: #777777; /* Lighter grey for equals */
+    --equals-btn-hover: #8a8a8a;
+    --scientific-btn-bg: #444444; /* Darker grey for scientific */
+    --scientific-btn-hover: #5a5a5a;
+    --feature-btn-bg: #222222; /* Very dark grey for utility features */
+    --feature-btn-hover: #383838;
+
+    --border-color: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -38,36 +35,71 @@
 }
 
 body {
-    background-color: var(--dark-bg);
+    background-color: var(--main-bg);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    color: var(--dark-text-color);
+    color: var(--text-color-light);
     transition: background-color 0.4s ease, color 0.4s ease;
     overflow: hidden;
 }
 
+/* Light theme classes for toggle - still grayscale */
 body.light-theme {
-    background-color: var(--light-bg);
-    color: var(--light-text-color);
+    background-color: #f0f0f0;
+    color: #333333;
 }
+
+.light-theme .calculator-container {
+    background-color: #e6e6e6;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 0 0 60px rgba(0, 0, 0, 0.05) inset;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light-theme #display {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1);
+    text-shadow: none;
+}
+
+.light-theme .btn {
+    background-color: #dcdcdc;
+    color: #333333;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.08), -6px -6px 12px rgba(255, 255, 255, 0.8);
+}
+
+.light-theme .btn:active {
+    box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.15), inset -4px -4px 10px rgba(255, 255, 255, 0.7);
+}
+
+.light-theme .btn:hover {
+    background-color: #c9c9c9;
+}
+
+.light-theme .operator { background-color: #b0b0b0; color: #000000; }
+.light-theme .operator:hover { background-color: #a0a0a0; }
+.light-theme .clear, .light-theme .backspace { background-color: #c0c0c0; color: #000000; }
+.light-theme .clear:hover, .light-theme .backspace:hover { background-color: #b0b0b0; }
+.light-theme .equals { background-color: #909090; color: #ffffff; }
+.light-theme .equals:hover { background-color: #808080; }
+.light-theme .scientific { background-color: #c5c5c5; color: #333333; }
+.light-theme .scientific:hover { background-color: #b5b5b5; }
+.light-theme .feature-row .feature-btn { background-color: #a0a0a0; color: #000000; }
+.light-theme .feature-row .feature-btn:hover { background-color: #909090; }
+
 
 .calculator-container {
     padding: 28px;
     border-radius: 25px;
-    background-color: var(--dark-calc-bg);
-    box-shadow: 0 10px 30px var(--dark-btn-shadow-dark), 0 0 80px rgba(0, 0, 0, 0.4) inset;
-    transition: background-color 0.4s ease, box-shadow 0.4s ease;
-    border: 1px solid var(--dark-border);
+    background-color: var(--calc-bg);
+    box-shadow: 0 10px 30px var(--btn-shadow), 0 0 80px rgba(0, 0, 0, 0.6) inset;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
-}
-
-.light-theme .calculator-container {
-    background-color: var(--light-calc-bg);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 0, 0, 0.05) inset;
-    border: 1px solid var(--light-border);
+    animation: fadeIn 0.8s ease-out;
 }
 
 .calculator {
@@ -81,27 +113,22 @@ body.light-theme {
 #display {
     width: 100%;
     padding: 28px;
-    background-color: var(--dark-display-bg);
+    background-color: var(--display-bg);
     border: none;
     border-radius: 15px;
     font-size: 3.2em;
     font-family: 'Orbitron', sans-serif;
     text-align: right;
-    color: var(--dark-text-color);
-    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+    color: var(--text-color-light);
+    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.9);
     overflow-x: auto;
     white-space: nowrap;
     caret-color: transparent;
     transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
     letter-spacing: 1px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.light-theme #display {
-    background-color: var(--light-display-bg);
-    color: var(--light-text-color);
-    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
-    text-shadow: none;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    line-height: 1.2;
+    min-height: 100px;
 }
 
 .button-row {
@@ -117,112 +144,67 @@ body.light-theme {
     border-radius: 50%;
     font-size: 1.7em;
     cursor: pointer;
-    background-color: var(--dark-btn-bg);
-    color: var(--dark-text-color);
+    background-color: var(--btn-bg);
+    color: var(--text-color-light);
     transition: background-color 0.25s ease, transform 0.1s ease, box-shadow 0.25s ease, color 0.25s ease;
-    box-shadow: 6px 6px 12px var(--dark-btn-shadow-dark), -6px -6px 12px var(--dark-btn-shadow-light);
+    box-shadow: var(--btn-shadow);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 500;
-}
-
-.light-theme .btn {
-    background-color: var(--light-btn-bg);
-    color: var(--light-text-color);
-    box-shadow: 6px 6px 12px var(--light-btn-shadow-dark), -6px -6px 12px var(--light-btn-shadow-light);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .btn:active {
     transform: scale(0.92);
-    box-shadow: inset 4px 4px 10px var(--dark-btn-shadow-dark), inset -4px -4px 10px var(--dark-btn-shadow-light);
-}
-
-.light-theme .btn:active {
-    box-shadow: inset 4px 4px 10px var(--light-btn-shadow-dark), inset -4px -4px 10px var(--light-btn-shadow-light);
+    box-shadow: var(--btn-active-shadow);
 }
 
 .btn:hover {
-    background-color: #30363d;
-    color: #ffffff;
-}
-
-.light-theme .btn:hover {
-    background-color: #dae2ea;
-    color: #000;
+    background-color: var(--btn-hover-bg);
+    color: var(--text-color-light);
 }
 
 .operator {
-    background-color: var(--dark-operator-color);
-    color: #ffffff;
+    background-color: var(--operator-btn-bg);
+    color: var(--text-color-light);
 }
 
 .operator:hover {
-    background-color: #4493f8;
-}
-
-.light-theme .operator {
-    background-color: var(--light-operator-color);
-}
-
-.light-theme .operator:hover {
-    background-color: #0257b8;
+    background-color: var(--operator-btn-hover);
 }
 
 .clear, .backspace {
-    background-color: var(--dark-clear-color);
-    color: #ffffff;
+    background-color: var(--clear-btn-bg);
+    color: var(--text-color-light);
 }
 
 .clear:hover, .backspace:hover {
-    background-color: #e33b3b;
-}
-
-.light-theme .clear, .light-theme .backspace {
-    background-color: var(--light-clear-color);
-}
-
-.light-theme .clear:hover, .light-theme .backspace:hover {
-    background-color: #c43242;
+    background-color: var(--clear-btn-hover);
 }
 
 .equals {
-    background-color: var(--dark-equals-color);
-    color: #ffffff;
+    background-color: var(--equals-btn-bg);
+    color: var(--text-color-light);
     flex-grow: 1;
     border-radius: 40px;
     font-size: 2.2em;
 }
 
 .equals:hover {
-    background-color: #278d42;
-}
-
-.light-theme .equals {
-    background-color: var(--light-equals-color);
-}
-
-.light-theme .equals:hover {
-    background-color: #1e7033;
+    background-color: var(--equals-btn-hover);
 }
 
 .scientific {
-    background-color: var(--dark-scientific-color);
-    color: var(--dark-text-color);
+    background-color: var(--scientific-btn-bg);
+    color: var(--text-color-light);
     font-size: 1.3em;
 }
 
 .scientific:hover {
-    background-color: #7a4ed3;
-}
-
-.light-theme .scientific {
-    background-color: var(--light-scientific-color);
-    color: #ffffff;
-}
-
-.light-theme .scientific:hover {
-    background-color: #6138ad;
+    background-color: var(--scientific-btn-hover);
 }
 
 .scientific sub, .scientific sup {
@@ -236,8 +218,8 @@ body.light-theme {
 }
 
 .feature-row .feature-btn {
-    background-color: var(--dark-feature-color);
-    color: #ffffff;
+    background-color: var(--feature-btn-bg);
+    color: var(--text-color-light);
     font-size: 1.05em;
     border-radius: 18px;
     width: auto;
@@ -247,17 +229,14 @@ body.light-theme {
 }
 
 .feature-row .feature-btn:hover {
-    background-color: #34a345;
-}
-
-.light-theme .feature-row .feature-btn {
-    background-color: var(--light-feature-color);
-}
-
-.light-theme .feature-row .feature-btn:hover {
-    background-color: #24913c;
+    background-color: var(--feature-btn-hover);
 }
 
 .feature-btn[onclick="toggleTheme()"] {
     font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
