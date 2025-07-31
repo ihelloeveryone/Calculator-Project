@@ -11,11 +11,37 @@ document.addEventListener('DOMContentLoaded', () => {
     loadHistory();
     updateDisplay();
     setupUnitConverter();
+    setupEventListeners();
 });
+
+function setupEventListeners() {
+    document.getElementById('hamburger').addEventListener('click', toggleNavMenu);
+    document.addEventListener('keydown', handleKeyPress);
+}
+
+function toggleNavMenu() {
+    const navMenu = document.getElementById('navMenu');
+    navMenu.classList.toggle('active');
+}
+
+function handleKeyPress(e) {
+    if (/[0-9.]/.test(e.key)) appendNumber(e.key);
+    if (/[+\-*/%]/.test(e.key)) appendOperator(e.key);
+    if (e.key === 'Enter') calculateResult();
+    if (e.key === 'Escape') clearDisplay();
+    if (e.key === 'Backspace') backspace();
+}
 
 function updateDisplay() {
     const display = document.getElementById('display');
+    const calcDisplay = document.getElementById('calculationDisplay');
     display.value = currentInput;
+    
+    if (operation && previousInput) {
+        calcDisplay.textContent = `${previousInput} ${operation} ${currentInput}`;
+    } else {
+        calcDisplay.textContent = '';
+    }
 }
 
 function appendNumber(number) {
@@ -28,11 +54,12 @@ function appendNumber(number) {
     updateDisplay();
 }
 
-function appendOperator(operator) {
+function appendOperator(op) {
     if (operation !== null) calculateResult();
     previousInput = currentInput;
-    operation = operator;
+    operation = op;
     resetScreen = true;
+    updateDisplay();
 }
 
 function appendFunction(func) {
@@ -88,7 +115,10 @@ function calculateResult() {
             }
         }
         
-        addToHistory(`${previousInput} ${operation || ''} ${currentInput} = ${computation}`);
+        const calculationString = `${previousInput} ${operation || ''} ${currentInput} = ${computation}`;
+        addToHistory(calculationString);
+        
+        document.getElementById('calculationDisplay').textContent = calculationString;
         currentInput = computation.toString();
         operation = null;
         resetScreen = true;
@@ -112,39 +142,6 @@ function toggleSign() {
     updateDisplay();
 }
 
-function calculateSquare() {
-    currentInput = (parseFloat(currentInput) ** 2).toString();
-    addToHistory(`sqr(${currentInput}) = ${currentInput}`);
-    updateDisplay();
-}
-
-function calculatePower() {
-    previousInput = currentInput;
-    operation = '**';
-    resetScreen = true;
-}
-
-function calculateRoot() {
-    previousInput = currentInput;
-    operation = 'root';
-    resetScreen = true;
-}
-
-function openParenthesis() {
-    currentInput += '(';
-    updateDisplay();
-}
-
-function closeParenthesis() {
-    currentInput += ')';
-    updateDisplay();
-}
-
-function toggleAngleMode() {
-    angleMode = angleMode === 'DEG' ? 'RAD' : 'DEG';
-    document.getElementById('angleMode').textContent = angleMode;
-}
-
 function memoryAdd() {
     memoryValue += parseFloat(currentInput);
 }
@@ -162,12 +159,31 @@ function memoryClear() {
     memoryValue = 0;
 }
 
-function showSettings() {
-    document.getElementById('settingsPanel').classList.add('active');
+function showModal(modalId) {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById(modalId).classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
-function closeSettings() {
-    document.getElementById('settingsPanel').classList.remove('active');
+function closeModal(modalId) {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById(modalId).classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function showSettings() {
+    showModal('settingsModal');
+    toggleNavMenu();
+}
+
+function showHistory() {
+    showModal('historyModal');
+    toggleNavMenu();
+}
+
+function showUnitConverter() {
+    showModal('unitConverterModal');
+    toggleNavMenu();
 }
 
 function saveSettings() {
@@ -184,7 +200,7 @@ function saveSettings() {
     localStorage.setItem('theme', theme);
     
     applySettings();
-    closeSettings();
+    closeModal('settingsModal');
 }
 
 function resetSettings() {
@@ -226,28 +242,19 @@ function applySettings() {
     const buttonRoundness = parseInt(document.getElementById('buttonRoundness').value);
     const theme = document.getElementById('themeSelect').value;
     
-    document.documentElement.style.setProperty('--display-font-size', `${displaySize}em`);
-    document.getElementById('display').style.fontSize = `${2.5 * displaySize}em`;
+    document.getElementById('display').style.fontSize = `${2.5 * displaySize}rem`;
     document.getElementById('display').style.filter = `brightness(${displayBrightness})`;
     
     const buttons = document.querySelectorAll('.btn');
     buttons.forEach(btn => {
         btn.style.height = `${60 * buttonSize}px`;
-        btn.style.fontSize = `${1.5 * buttonSize}em`;
+        btn.style.fontSize = `${1.5 * buttonSize}rem`;
         btn.style.borderRadius = `${buttonRoundness}%`;
     });
     
     document.body.className = '';
     if (theme === 'light') document.body.classList.add('light-theme');
     if (theme === 'highContrast') document.body.classList.add('high-contrast');
-}
-
-function showHistory() {
-    document.getElementById('historyPanel').classList.add('active');
-}
-
-function closeHistory() {
-    document.getElementById('historyPanel').classList.remove('active');
 }
 
 function addToHistory(entry) {
@@ -289,15 +296,7 @@ function useHistoryEntry(entry) {
     const result = entry.split('=')[1].trim();
     currentInput = result;
     updateDisplay();
-    closeHistory();
-}
-
-function showUnitConverter() {
-    document.getElementById('unitConverter').classList.add('active');
-}
-
-function closeUnitConverter() {
-    document.getElementById('unitConverter').classList.remove('active');
+    closeModal('historyModal');
 }
 
 function setupUnitConverter() {
@@ -318,9 +317,6 @@ function setupUnitConverter() {
             case 'temperature': units = ['celsius', 'fahrenheit', 'kelvin']; break;
             case 'area': units = ['square meters', 'square kilometers', 'square miles', 'square feet', 'square inches', 'hectares', 'acres']; break;
             case 'volume': units = ['liters', 'milliliters', 'cubic meters', 'cubic centimeters', 'gallons', 'quarts', 'pints', 'cups']; break;
-            case 'speed': units = ['meters/second', 'kilometers/hour', 'miles/hour', 'feet/second', 'knots']; break;
-            case 'time': units = ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years']; break;
-            case 'digital': units = ['bits', 'bytes', 'kilobytes', 'megabytes', 'gigabytes', 'terabytes']; break;
         }
         
         converterFrom.innerHTML = '';
@@ -358,9 +354,6 @@ function performConversion() {
         case 'temperature': result = convertTemperature(value, fromUnit, toUnit); break;
         case 'area': result = convertArea(value, fromUnit, toUnit); break;
         case 'volume': result = convertVolume(value, fromUnit, toUnit); break;
-        case 'speed': result = convertSpeed(value, fromUnit, toUnit); break;
-        case 'time': result = convertTime(value, fromUnit, toUnit); break;
-        case 'digital': result = convertDigital(value, fromUnit, toUnit); break;
     }
     
     document.getElementById('converterResult').value = result.toFixed(6);
@@ -371,7 +364,7 @@ function useConverterResult() {
     if (result) {
         currentInput = result;
         updateDisplay();
-        closeUnitConverter();
+        closeModal('unitConverterModal');
     }
 }
 
@@ -440,42 +433,6 @@ function convertVolume(value, fromUnit, toUnit) {
         'quarts': 0.946353,
         'pints': 0.473176,
         'cups': 0.236588
-    };
-    return (value * conversions[fromUnit]) / conversions[toUnit];
-}
-
-function convertSpeed(value, fromUnit, toUnit) {
-    const conversions = {
-        'meters/second': 1,
-        'kilometers/hour': 0.277778,
-        'miles/hour': 0.44704,
-        'feet/second': 0.3048,
-        'knots': 0.514444
-    };
-    return (value * conversions[fromUnit]) / conversions[toUnit];
-}
-
-function convertTime(value, fromUnit, toUnit) {
-    const conversions = {
-        'seconds': 1,
-        'minutes': 60,
-        'hours': 3600,
-        'days': 86400,
-        'weeks': 604800,
-        'months': 2629800,
-        'years': 31557600
-    };
-    return (value * conversions[fromUnit]) / conversions[toUnit];
-}
-
-function convertDigital(value, fromUnit, toUnit) {
-    const conversions = {
-        'bits': 1,
-        'bytes': 8,
-        'kilobytes': 8192,
-        'megabytes': 8388608,
-        'gigabytes': 8589934592,
-        'terabytes': 8796093022208
     };
     return (value * conversions[fromUnit]) / conversions[toUnit];
 }
