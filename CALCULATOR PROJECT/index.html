@@ -2,46 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CALCULATOR DESIGN 1</title>
-    <link rel="stylesheet" href="index.css">
-    <script src="index.js"></script>
+    <title>Calculator Design 1</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container" >
+    <div class="calculator-container">
         <div class="calculator">
-            <input type="text" name="text" id="inputBox" placeholder="0">
-            <div>
-                <button onclick="clearcalc()" value="clear" id="clear">C</button>
-                <button onclick="del()" id="del">⌫</button>
-                <button onclick="display('%')" id="percent">%</button>
-                <button onclick="display('/')" class="operator">/</button>
+            <input type="text" id="display" readonly>
+            <div class="button-row">
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                <button class="btn backspace" onclick="backspace()">&#9003;</button>
+                <button class="btn operator" onclick="appendOperator('%')">%</button>
+                <button class="btn scientific" onclick="appendOperator('**')">x<sup>y</sup></button>
+                <button class="btn scientific" onclick="toggleSign()">+/-</button>
             </div>
-            <div>
-                <button onclick="display('7')">7</button>
-                <button onclick="display('8')">8</button>
-                <button onclick="display('9')">9</button>
-                <button onclick="display('*')" class="operator" value="×">×</button>
+            <div class="button-row">
+                <button class="btn scientific" onclick="appendFunction('Math.sin(')">sin</button>
+                <button class="btn scientific" onclick="appendFunction('Math.cos(')">cos</button>
+                <button class="btn scientific" onclick="appendFunction('Math.tan(')">tan</button>
+                <button class="btn scientific" onclick="appendFunction('Math.log(')">ln</button>
+                <button class="btn scientific" onclick="appendFunction('Math.log10(')">log</button>
             </div>
-            <div>
-                <button onclick="display('4')">4</button>
-                <button onclick="display('5')">5</button>
-                <button onclick="display('6')">6</button>
-                <button onclick="display('-')" class="operator">-</button>
+            <div class="button-row">
+                <button class="btn scientific" onclick="appendFunction('Math.asin(')">asin</button>
+                <button class="btn scientific" onclick="appendFunction('Math.acos(')">acos</button>
+                <button class="btn scientific" onclick="appendFunction('Math.atan(')">atan</button>
+                <button class="btn scientific" onclick="appendFunction('Math.sqrt(')">√</button>
+                <button class="btn scientific" onclick="appendFunction('Math.cbrt(')">∛</button>
             </div>
-            <div>
-                <button onclick="display('1')">1</button>
-                <button onclick="display('2')">2</button>
-                <button onclick="display('3')">3</button>
-                <button onclick="display('+')" class="operator">+</button>
+            <div class="button-row">
+                <button class="btn" onclick="appendNumber('7')">7</button>
+                <button class="btn" onclick="appendNumber('8')">8</button>
+                <button class="btn" onclick="appendNumber('9')">9</button>
+                <button class="btn operator" onclick="appendOperator('/')">/</button>
+                <button class="btn operator" onclick="appendOperator('*')">×</button>
             </div>
-            <div>
-                <button onclick="display('.')">.</button>
-                <button onclick="display('0')">0</button>
-                <button onclick="calculate()" id="equalto">=</button>
+            <div class="button-row">
+                <button class="btn" onclick="appendNumber('4')">4</button>
+                <button class="btn" onclick="appendNumber('5')">5</button>
+                <button class="btn" onclick="appendNumber('6')">6</button>
+                <button class="btn operator" onclick="appendOperator('-')">-</button>
+                <button class="btn operator" onclick="appendOperator('+')">+</button>
+            </div>
+            <div class="button-row">
+                <button class="btn scientific" onclick="appendFunction('Math.PI')">π</button>
+                <button class="btn scientific" onclick="appendFunction('Math.E')">e</button>
+                <button class="btn scientific" onclick="appendFunction('factorial(')">x!</button>
+                <button class="btn scientific" onclick="appendFunction('pow(10,')">10<sup>x</sup></button>
+                <button class="btn scientific" onclick="appendFunction('pow(2,')">2<sup>x</sup></button>
+            </div>
+            <div class="button-row bottom-row">
+                <button class="btn scientific" onclick="openParenthesis('(')">(</button>
+                <button class="btn scientific" onclick="closeParenthesis(')')">)</button>
+                <button class="btn" onclick="appendNumber('0')">0</button>
+                <button class="btn decimal" onclick="appendNumber('.')">.</button>
+                <button class="btn equals" onclick="calculateResult()">=</button>
+            </div>
+
+            <div class="button-row feature-row">
+                <button class="btn feature-btn" onclick="saveToMemory()">M+</button>
+                <button class="btn feature-btn" onclick="recallMemory()">MR</button>
+                <button class="btn feature-btn" onclick="clearMemory()">MC</button>
+                <button class="btn feature-btn" onclick="convertUnit()">Unit</button>
+                <button class="btn feature-btn" onclick="showHistory()">Hist</button>
+            </div>
+            <div class="button-row feature-row">
+                <button class="btn feature-btn" onclick="randomNum()">Rand</button>
+                <button class="btn feature-btn" onclick="toggleTheme()">Theme</button>
+                <button class="btn feature-btn" onclick="appendFunction('degToRad(')">Deg→Rad</button>
+                <button class="btn feature-btn" onclick="appendFunction('radToDeg(')">Rad→Deg</button>
+                <button class="btn feature-btn" onclick="scientificNotation()">Sci</button>
             </div>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
